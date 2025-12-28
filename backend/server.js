@@ -46,7 +46,14 @@ app.post("/api/bookings", async (req, res) => {
 /* GET ALL BOOKINGS */
 app.get("/api/bookings", async (req, res) => {
   const bookings = await Booking.find().sort({ _id: -1 });
-  res.json(bookings);
+  // Ensure response includes both `checkIn`/`checkOut` and `checkin`/`checkout` for compatibility
+  const out = bookings.map(b => {
+    const obj = b.toObject ? b.toObject() : Object.assign({}, b);
+    if (obj.checkIn && !obj.checkin) obj.checkin = obj.checkIn;
+    if (obj.checkOut && !obj.checkout) obj.checkout = obj.checkOut;
+    return obj;
+  });
+  res.json(out);
 });
 
 /* UPDATE STATUS */
