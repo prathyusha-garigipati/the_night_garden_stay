@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const API_BASE =
     window.location.hostname === "localhost"
       ? "http://localhost:5000"
-      : "https://YOUR_BACKEND_URL";
+  : "https://the-night-garden-stay.onrender.com";
   const ADVANCE_AMOUNT = 2000;
 
   let paymentDone = false;
