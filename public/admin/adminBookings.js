@@ -4,7 +4,7 @@
 */
 
 (() => {
-  const API_URL = "http://localhost:5000/api/bookings";
+  const API_URL = "https://the-night-garden-stay.onrender.com/api/bookings";
 
   const tbody = document.querySelector("#bookingsTable tbody");
   const totalEl = document.getElementById("totalBookings");
