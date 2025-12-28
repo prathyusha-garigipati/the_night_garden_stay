@@ -11,7 +11,7 @@ const Booking = require("./models/Booking");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+app.use(cors({ origin: "*" }));
 app.use(express.json({ limit: "10mb" }));
 
 // ✅ MongoDB URI (WITH DB NAME)

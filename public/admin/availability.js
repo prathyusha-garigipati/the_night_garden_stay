@@ -19,7 +19,7 @@ function _getCheckout(obj) { if (!obj) return ''; return obj.checkOut || obj.che
 const calendar = document.getElementById("calendar");
 const monthYear = document.getElementById("monthYear");
 // API URL (use backend server where MongoDB is connected)
-const API_BASE = (window.API_BASE && String(window.API_BASE).replace(/\/$/, '')) || 'http://localhost:5000';
+const API_BASE = (window.API_BASE && String(window.API_BASE).replace(/\/$/, '')) || 'https://the-night-garden-stay.onrender.com';
 const API_URL = API_BASE + '/api/bookings';
 
 // add admin controls container (if present in DOM, append controls)
