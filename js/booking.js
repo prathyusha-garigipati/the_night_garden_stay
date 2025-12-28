@@ -26,7 +26,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const paymentStatus = document.getElementById("paymentStatus");
   const notificationDiv = document.getElementById("notificationMessage");
 
-  const API_BASE = "http://localhost:5000";
+  const API_BASE =
+    window.location.hostname === "localhost"
+      ? "http://localhost:5000"
+      : "https://YOUR_BACKEND_URL";
   const ADVANCE_AMOUNT = 2000;
 
   let paymentDone = false;
@@ -401,7 +404,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   try {
-    const res = await fetch("http://localhost:5000/api/bookings", {
+    const res = await fetch(`${API_BASE}/api/bookings`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(booking)

@@ -7,6 +7,12 @@ function logout() {
   window.location.href = "login.html";
 }
 
+// environment-aware API base (useful if this file later calls backend)
+const API_BASE =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://YOUR_BACKEND_URL";
+
 const table = document.getElementById("bookingTable");
 let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
 

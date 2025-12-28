@@ -1,8 +1,10 @@
 /* ===== HERO ===== */
 .hero {
-  background:
-    linear-gradient(rgba(11,29,26,0.6), rgba(11,29,26,0.9)),
-    url("../assets/images/hero/hero1.jpg") center/cover no-repeat;
+  /* Use gradient-only hero background (no external image) */
+  background: linear-gradient(rgba(11,29,26,0.6), rgba(11,29,26,0.9));
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
   min-height: 90vh;
   display: flex;
   align-items: center;
