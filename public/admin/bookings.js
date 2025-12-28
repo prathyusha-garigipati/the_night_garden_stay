@@ -25,7 +25,7 @@ function renderBookings() {
 
     row.innerHTML = `
       <td>${b.name}</td>
-      <td>${b.checkin || ''} → ${b.checkout || ''}</td>
+      <td>${b.checkIn || b.checkin || ''} → ${b.checkOut || b.checkout || ''}</td>
       <td>${b.guests || ''}</td>
       <td>
         <span class="status ${b.status}">
@@ -59,7 +59,7 @@ if (bookingsListContainer) {
     if (b.status === 'pending') {
       const div = document.createElement('div');
       div.innerHTML = `
-        <strong>${b.name}</strong> - ${b.checkin || b.date || ''}
+  <strong>${b.name}</strong> - ${b.checkIn || b.checkin || b.date || ''}
         <button onclick="approvePublic(${i})">Approve</button>
         <button onclick="rejectPublic(${i})">Reject</button>
       `;

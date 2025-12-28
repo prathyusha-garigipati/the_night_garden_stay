@@ -52,7 +52,7 @@
       return;
     }
 
-    // helpers to pick common keys
+    // helpers to pick common keys and normalize checkin/checkout field names
     const pick = (obj, keys) => {
       for (let k of keys) {
         if (!obj) continue;
@@ -60,6 +60,8 @@
       }
       return null;
     };
+
+    
 
     bookings.forEach((b, index) => {
       const tr = document.createElement('tr');
@@ -110,10 +112,10 @@
         <td>${escapeHtml(b.name || '')}</td>
         <td>${escapeHtml(b.email || '')}</td>
         <td>${escapeHtml(b.phone || '')}</td>
-        <td>${escapeHtml(b.checkin || '')}</td>
-        <td>${escapeHtml(b.checkout || '')}</td>
+  <td>${escapeHtml(getCheckin(b) || '')}</td>
+  <td>${escapeHtml(getCheckout(b) || '')}</td>
   <td>${escapeHtml(guestLabel(b.guests || ''))}</td>
-  <td>${formatRupees(computePriceForBooking(b.guests || '1', b.checkin || ''))}</td>
+  <td>${formatRupees(computePriceForBooking(b.guests || '1', getCheckin(b) || ''))}</td>
   <td>${escapeHtml(b.message || '')}</td>
   <td><div>${amount ? (Number(amount) ? (Number(amount) >= 100000 ? (Number(amount)/100).toFixed(2) : Number(amount).toFixed(2)) + ' INR' : escapeHtml(String(amount))) : '—'}</div></td>
         <td><span class="status ${escapeHtml((payStatus || '').toLowerCase())}">${escapeHtml(payStatus || '')}</span></td>
@@ -184,7 +186,7 @@
           // find the booking we just approved and add its date range to bookedDates
           const all = await fetchBookingsFromApi();
           const found = (all || []).find(b => String(b.id || b._id || '') === String(id));
-          if (found && found.checkin && found.checkout) addBookedRange(found.checkin, found.checkout);
+          if (found && getCheckin(found) && getCheckout(found)) addBookedRange(getCheckin(found), getCheckout(found));
         } catch (e) { console.warn('Could not add booked range', e); }
       }
     } catch (err) {
@@ -210,7 +212,7 @@
       // If booking was approved, remove its dates from localStorage so they become available
       try {
         if (found && (String(found.status).toLowerCase() === 'approved')) {
-          if (found.checkin && found.checkout) await removeBookedRange(found.checkin, found.checkout, false);
+          if (getCheckin(found) && getCheckout(found)) await removeBookedRange(getCheckin(found), getCheckout(found), false);
         }
       } catch (e) { console.warn('Failed to remove booked range after delete', e); }
 
@@ -250,8 +252,8 @@
           (all || []).forEach(bk => {
             try {
               if (!bk || String(bk.status).toLowerCase() !== 'approved') return;
-              const cs = (bk.checkin || '').split('T')[0];
-              const ce = (bk.checkout || '').split('T')[0];
+              const cs = (getCheckin(bk) || '').split('T')[0];
+              const ce = (getCheckout(bk) || '').split('T')[0];
               if (!cs || !ce) return;
               for (let d = new Date(cs); d <= new Date(ce); d.setDate(d.getDate()+1)) {
                 otherDates.add(toLocalISO_admin(d));
@@ -338,8 +340,8 @@
     try {
       const all = await fetchBookingsFromApi();
       const found = (all || []).find(b => String(b.id || b._id || '') === String(id));
-      if (!found || !found.checkin || !found.checkout) return alert('Booking does not have dates');
-      addBlockedRange(found.checkin, found.checkout);
+  if (!found || !getCheckin(found) || !getCheckout(found)) return alert('Booking does not have dates');
+  addBlockedRange(getCheckin(found), getCheckout(found));
       alert('Dates blocked for booking ' + id);
     } catch (e) { console.warn('blockDates failed', e); alert('Failed to block dates'); }
   }
@@ -348,8 +350,8 @@
     try {
       const all = await fetchBookingsFromApi();
       const found = (all || []).find(b => String(b.id || b._id || '') === String(id));
-      if (!found || !found.checkin || !found.checkout) return alert('Booking does not have dates');
-      removeBlockedRange(found.checkin, found.checkout);
+  if (!found || !getCheckin(found) || !getCheckout(found)) return alert('Booking does not have dates');
+  removeBlockedRange(getCheckin(found), getCheckout(found));
       alert('Dates unblocked for booking ' + id);
     } catch (e) { console.warn('unblockDates failed', e); alert('Failed to unblock dates'); }
   }
@@ -388,6 +390,17 @@
 
   function escapeHtml(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; });
+  }
+
+  // normalize checkin/checkout field names across backend/frontend variants
+  function getCheckin(obj) {
+    if (!obj) return '';
+    return obj.checkIn || obj.checkin || obj.check_in || obj.date || '';
+  }
+
+  function getCheckout(obj) {
+    if (!obj) return '';
+    return obj.checkOut || obj.checkout || obj.check_out || '';
   }
 
   // ---------- PRICE HELPERS (same rules as public booking page) ----------

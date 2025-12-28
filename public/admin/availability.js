@@ -12,6 +12,10 @@ let currentDate = new Date();
 let blockedDates = JSON.parse(localStorage.getItem("blockedDates")) || [];
 let bookedDates = JSON.parse(localStorage.getItem("bookedDates")) || [];
 
+// normalize checkin/checkout field names helpers
+function _getCheckin(obj) { if (!obj) return ''; return obj.checkIn || obj.checkin || obj.check_in || obj.date || ''; }
+function _getCheckout(obj) { if (!obj) return ''; return obj.checkOut || obj.checkout || obj.check_out || ''; }
+
 const calendar = document.getElementById("calendar");
 const monthYear = document.getElementById("monthYear");
 // API URL (use backend server where MongoDB is connected)
@@ -104,8 +108,8 @@ async function removeBookedDateSingle(dateStr) {
     const claimedByOther = (all || []).some(bk => {
       try {
         if (!bk || String(bk.status).toLowerCase() !== 'approved') return false;
-        const cs = (bk.checkin || '').split('T')[0];
-        const ce = (bk.checkout || '').split('T')[0];
+  const cs = (_getCheckin(bk) || '').split('T')[0];
+  const ce = (_getCheckout(bk) || '').split('T')[0];
         if (!cs || !ce) return false;
         return (dateStr >= cs && dateStr <= ce);
       } catch (e) { return false; }
@@ -226,8 +230,8 @@ async function handleBookedClick(dateStr) {
     const matches = (all || []).filter(b => {
       try {
         if (!b || String(b.status).toLowerCase() !== 'approved') return false;
-        const cs = (b.checkin || '').split('T')[0];
-        const ce = (b.checkout || '').split('T')[0];
+  const cs = (_getCheckin(b) || '').split('T')[0];
+  const ce = (_getCheckout(b) || '').split('T')[0];
         if (!cs || !ce) return false;
         return (dateStr >= cs && dateStr <= ce);
       } catch (e) { return false; }
