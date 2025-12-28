@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/package",
   "name": "the_night_garden",
   "version": "1.0.0",
   "description": "",
