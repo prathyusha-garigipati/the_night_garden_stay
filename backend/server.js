@@ -29,7 +29,12 @@ mongoose.connect(mongoUri)
 /* CREATE BOOKING */
 app.post("/api/bookings", async (req, res) => {
   try {
-    const booking = new Booking(req.body);
+    // Normalize date field names from frontend (some clients send checkin/checkout lowercase)
+    const payload = Object.assign({}, req.body);
+    if (payload.checkin && !payload.checkIn) payload.checkIn = payload.checkin;
+    if (payload.checkout && !payload.checkOut) payload.checkOut = payload.checkout;
+
+    const booking = new Booking(payload);
     await booking.save();
     res.status(201).json(booking);
   } catch (err) {
