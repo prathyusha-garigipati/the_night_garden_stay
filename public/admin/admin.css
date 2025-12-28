@@ -401,6 +401,17 @@ input::placeholder {
     flex-direction: column;
     gap: 10px;
   }
+  /* make table horizontally scrollable on small screens */
+  .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  #bookingsTable { min-width: 900px; }
+
+  /* make action buttons and inputs more compact on mobile */
+  .action-btn { min-width: auto; padding: 6px 8px; font-size: 0.9rem; }
+  .action-btn.delete { padding: 6px; }
+  .admin-login { width: 100%; padding: 1.5rem; }
+  .admin-table th, .admin-table td, #bookingsTable thead th, #bookingsTable tbody td { padding: 8px; font-size: 0.9rem; }
+  /* stack small metric cards nicely */
+  section:nth-of-type(1) { grid-template-columns: 1fr; }
 }
 .login button {
   border: 2px solid var(--accent);

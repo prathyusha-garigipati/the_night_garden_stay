@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard | The Night Garden Stay</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
@@ -33,6 +34,7 @@
       <button onclick="exportCSV('leads')" class="export">Export Leads</button>
     </div>
     <div id="bookingsList">
+      <div class="table-responsive">
       <table id="bookingsTable">
         <thead>
           <tr>
@@ -58,6 +60,7 @@
         </thead>
         <tbody></tbody>
       </table>
+      </div>
     </div>
   </section>
 
